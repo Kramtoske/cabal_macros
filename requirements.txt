@@ -1,0 +1,10 @@
+datetime
+keyboard
+mouse
+opencv-python
+Pillow
+pyautogui
+pydirectinput
+pygetwindow
+pywinauto
+typing

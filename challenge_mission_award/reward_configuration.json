@@ -1,0 +1,78 @@
+{
+    "CHALLENGE_MISSION": {
+        "X": 2220,
+        "Y": 1376
+    },
+    "REWARD": {
+        "X": 1534,
+        "Y": 544
+    },
+    "RECEIVE_REWARD": {
+        "X": 1380,
+        "Y": 924
+    },
+    "FIRST_ROW_1": {
+        "X": 1279,
+        "Y": 674
+    },
+    "FIRST_ROW_2": {
+        "X": 1353,
+        "Y": 671
+    },
+    "FIRST_ROW_3": {
+        "X": 1423,
+        "Y": 676
+    },
+    "FIRST_ROW_4": {
+        "X": 1496,
+        "Y": 672
+    },
+    "SECOND_ROW_1": {
+        "X": 1278,
+        "Y": 754
+    },
+    "SECOND_ROW_2": {
+        "X": 1352,
+        "Y": 756
+    },
+    "SECOND_ROW_3": {
+        "X": 1425,
+        "Y": 758
+    },
+    "SECOND_ROW_4": {
+        "X": 1497,
+        "Y": 757
+    },
+    "THIRD_ROW_1": {
+        "X": 1279,
+        "Y": 838
+    },
+    "THIRD_ROW_2": {
+        "X": 1356,
+        "Y": 841
+    },
+    "THIRD_ROW_3": {
+        "X": 1424,
+        "Y": 843
+    },
+    "THIRD_ROW_4": {
+        "X": 1492,
+        "Y": 840
+    },
+    "SELECT_CHANNEL": {
+        "X": 1278,
+        "Y": 700
+    },
+    "FIRST_CHANNEL": {
+        "X": 1230,
+        "Y": 747
+    },
+    "SECOND_CHANNEL": {
+        "X": 1219,
+        "Y": 780
+    },
+    "CHANGE_CHANNEL_ACCEPT": {
+        "X": 1281,
+        "Y": 771
+    }
+}
