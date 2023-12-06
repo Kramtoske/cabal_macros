@@ -1,1 +1,1 @@
-# cabal
+# Cabal macro collection
