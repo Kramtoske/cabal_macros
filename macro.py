@@ -1,7 +1,6 @@
-import time
-
 import keyboard
 import pygetwindow
+import time
 
 cabal_window = pygetwindow.getWindowsWithTitle("CABAL")[0]
 cabal_window.activate()

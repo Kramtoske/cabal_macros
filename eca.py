@@ -1,32 +1,26 @@
+import controller
+import keyboard
 import os
+import pyautogui
+import pydirectinput
 import threading
 import time
 
-import keyboard
-import pyautogui as pygui
-import pydirectinput as pyd
-import pygetwindow as pyw
-
-import controller
-
 run_combat_thread = True
 run_main_loop = True
-eca_started = False
 pause_event = threading.Event()
 internal_pause_event = threading.Event()
-pygui.FAILSAFE = False
+pyautogui.FAILSAFE = False
 
 
 def stop_all(event=None):
     print("STOPPING...")
     global run_combat_thread
     global run_main_loop
-    global eca_started
     global pause_event
     global internal_pause_event
     run_combat_thread = False
     run_main_loop = False
-    eca_started = False
     pause_event.set()
     internal_pause_event.set()
     os._exit(0)
@@ -45,7 +39,7 @@ def init():
     global internal_pause_event
     internal_pause_event.wait()
     print("init...")
-    pyd.press("f4")
+    pydirectinput.press("f4")
 
 
 def start():
@@ -62,7 +56,7 @@ def start():
             stop_all()
             print("cannot find enter button")
             os._exit(-1)
-        pygui.click(button="left", x=1065, y=583)
+        pyautogui.click(button="left", x=1065, y=583)
 
     time.sleep(0.2)
 
@@ -78,7 +72,7 @@ def start():
         os._exit(-3)
     time.sleep(0.2)
 
-    pygui.moveTo(1, 1)
+    pyautogui.moveTo(1, 1)
 
     if controller.image_on_screen("pics/eca/challenge_screen.png", 0.9) is False:
         stop_all()
@@ -97,23 +91,23 @@ def run_to_gate():
     global internal_pause_event
     internal_pause_event.wait()
     print("run to gate...")
-    pygui.moveTo(x=41, y=876)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
-    pygui.dragTo(x=800, y=864, button="right", duration=0.5)
+    pyautogui.moveTo(x=41, y=876)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
+    pyautogui.dragTo(x=800, y=864, button="right", duration=0.5)
     time.sleep(0.2)
-    pygui.moveTo(x=1250, y=60)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
+    pyautogui.moveTo(x=1250, y=60)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
 
 
-def kill_gate():
+def kill_gate() -> bool:
     global internal_pause_event
     internal_pause_event.wait()
     print("kill gate...")
@@ -121,35 +115,35 @@ def kill_gate():
     start_time = time.time()
     while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is False:
         if time.time() - start_time > 15:
-            stop_all()
             print("failed to find gates")
-            os._exit(-6)
-        pygui.click(button="middle")
+            return False
+        pyautogui.click(button="middle")
         time.sleep(0.1)
 
     start_time = time.time()
     while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is True:
         if time.time() - start_time > 30:
-            stop_all()
             print("failed to kill gates")
-            os._exit(-7)
+            return False
         controller.send_key("3")
         controller.send_key("4")
         controller.send_key("5")
         controller.send_key("6")
         time.sleep(0.1)
 
+    return True
+
 
 def run_to_center():
     global internal_pause_event
     internal_pause_event.wait()
     print("run to center...")
-    pygui.moveTo(x=1200, y=51)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
-    pyd.press("2", interval=0.4)
-    pyd.press("1", interval=0.6)
+    pyautogui.moveTo(x=1200, y=51)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
+    pydirectinput.press("2", interval=0.4)
+    pydirectinput.press("1", interval=0.6)
 
 
 def dead() -> bool:
@@ -157,17 +151,15 @@ def dead() -> bool:
 
 
 def resurrect() -> bool:
-    if controller.image_click("pics/eca/normal_resurrect.png", 0.9) == False:
+    if not controller.image_click("pics/eca/normal_resurrect.png", 0.9):
         return False
     return controller.image_click("pics/eca/confirmation.png", 0.9)
 
 
 def exit_dungeon() -> bool:
-    if controller.image_click("pics/eca/exit_button.png", 0.9) == False:
+    if not controller.image_click("pics/eca/exit_button.png", 0.9):
         return False
-    if controller.image_click("pics/eca/exit_confirmation_button.png", 0.9) == False:
-        return False
-    return True
+    return controller.image_click("pics/eca/exit_confirmation_button.png", 0.9)
 
 
 def failed() -> bool:
@@ -183,13 +175,11 @@ def cleared() -> bool:
 
 
 def exit_after_clear() -> bool:
-    if controller.image_click("pics/eca/clear_confirmation.png", 0.9) == False:
+    if not controller.image_click("pics/eca/clear_confirmation.png", 0.9):
         return False
-    if controller.image_click("pics/eca/roll_dice.png", 0.9) == False:
+    if not controller.image_click("pics/eca/roll_dice.png", 0.9):
         return False
-    if controller.image_click("pics/eca/exit_after_clear.png", 0.9) == False:
-        return False
-    return True
+    return controller.image_click("pics/eca/exit_after_clear.png", 0.9)
 
 
 def disconnected() -> bool:
@@ -198,7 +188,9 @@ def disconnected() -> bool:
     ) or controller.image_on_screen("pics/eca/account_login.png", 0.9)
 
 
-def protection_thread(main_pause: threading.Event, internal_pause: threading.Event):
+def protection_thread_func(
+    main_pause: threading.Event, internal_pause: threading.Event
+):
     print("starting protection thread")
     global run_combat_thread
     global run_main_loop
@@ -208,11 +200,11 @@ def protection_thread(main_pause: threading.Event, internal_pause: threading.Eve
 
         if cleared() is True:
             run_combat_thread = False
-            pyd.press("space")
-            pyd.press("space")
-            pyd.press("space")
-            pyd.press("space")
-            pyd.press("space")
+            pydirectinput.press("space")
+            pydirectinput.press("space")
+            pydirectinput.press("space")
+            pydirectinput.press("space")
+            pydirectinput.press("space")
             print(f"cleared!")
             exit_after_clear()
 
@@ -241,7 +233,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
     print("calling mercs")
     for merc in mercs:
         controller.send_key(merc)
-        time.sleep(11)
+        time.sleep(12)
 
     start_time = time.time()
 
@@ -252,7 +244,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
             print("calling mercs")
             for merc in mercs:
                 controller.send_key(merc)
-                time.sleep(11)
+                time.sleep(12)
             break
         time.sleep(0.1)
 
@@ -292,7 +284,7 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
             one_shot_trigger = True
 
         if counter % 10 == 0:
-            pygui.click(button="middle")
+            pyautogui.click(button="middle")
 
         counter = counter + 1
         time.sleep(0.1)
@@ -303,49 +295,45 @@ def main():
     global run_main_loop
     global pause_event
     global internal_pause_event
-    global eca_started
 
     keyboard.on_press_key("f10", pause_all)
     keyboard.on_press_key("f12", stop_all)
 
-    cabal_window = pyw.getWindowsWithTitle("CABAL")[0]
-    cabal_window.activate()
-    cabal_window.maximize()
+    controller.focus_cabal()
 
     pause_event.set()
     internal_pause_event.set()
 
-    main_threads = [protection_thread]
-    main_thread_joins = []
-    for thread in main_threads:
-        t = threading.Thread(target=thread, args=(pause_event, internal_pause_event))
-        t.start()
-        main_thread_joins.append(t)
+    protection_thread = threading.Thread(
+        target=protection_thread_func, args=(pause_event, internal_pause_event)
+    )
+    protection_thread.start()
 
     while run_main_loop:
         pause_event.wait()
         internal_pause_event.wait()
-        pygui.PAUSE = 0.1
-        pygui.click(button="right", x=1065, y=583)
+        pyautogui.PAUSE = 0.1
+        pyautogui.click(button="right", x=1065, y=583)
 
         if disconnected():
             internal_pause_event.clear()
+            stop_all()
 
         init()
         start()
-
-        eca_started = True
-
         run_to_gate()
-        kill_gate()
+
+        if not kill_gate():
+            exit_dungeon()
+            continue
+
         run_to_center()
-        pygui.PAUSE = 0.001
+        pyautogui.PAUSE = 0.001
 
         print("start threads...")
 
-        combat_threads = [combat_thread, mercenary_thread]
         combat_thread_joins = []
-        for thread in combat_threads:
+        for thread in [combat_thread, mercenary_thread]:
             t = threading.Thread(
                 target=thread, args=(pause_event, internal_pause_event)
             )
@@ -357,7 +345,6 @@ def main():
 
         print("after threads...")
 
-        eca_started = False
         time.sleep(1)
         print("refilling sp...")
         counter = 0
@@ -366,8 +353,7 @@ def main():
             time.sleep(6)
             counter = counter + 1
 
-    for thread_join in main_thread_joins:
-        thread_join.join()
+    protection_thread.join()
 
 
 main()

@@ -71,7 +71,7 @@ def image_on_screen(img: str, confidence: float) -> bool:
     for _ in range(3):
         try:
             item = pyautogui.locateOnScreen(img, confidence=confidence)
-            if item != None:
+            if item is not None:
                 return True
         except:
             continue
@@ -82,7 +82,7 @@ def image_locate(img: str, confidence: float) -> Optional[pyautogui.Point]:
     for _ in range(3):
         try:
             item = pyautogui.locateCenterOnScreen(image=img, confidence=confidence)
-            if item != None:
+            if item is not None:
                 return item
         except:
             continue

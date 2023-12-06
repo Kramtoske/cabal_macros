@@ -1,13 +1,10 @@
-import os
-import threading
-import time
-
 import keyboard
+import os
 import pyautogui
 import pydirectinput
-import pygetwindow
-
-from controller import image_click, image_on_screen, send_key
+import threading
+import time
+from controller import image_click, image_on_screen, send_key, focus_cabal
 
 pyautogui.FAILSAFE = False
 run_combat_thread = False
@@ -16,10 +13,6 @@ run_combat_thread = False
 def stop_all(_event=None):
     print("STOPPING...")
     os._exit(0)
-
-
-def pause_all(_event=None):
-    print("PAUSING...")
 
 
 def init():
@@ -87,29 +80,28 @@ def run_to_gate():
     pydirectinput.press("1", interval=0.6)
 
 
-def kill_gate():
+def kill_gate() -> bool:
     print("kill gate...")
 
     start_time = time.time()
     while image_on_screen("pics/ca/gate_hp_bar.png", 0.9) is False:
         if time.time() - start_time > 15:
-            stop_all()
             print("failed to find gates")
-            os._exit(-6)
+            return False
         pyautogui.click(button="middle")
         time.sleep(0.1)
 
     start_time = time.time()
     while image_on_screen("pics/ca/gate_hp_bar.png", 0.9) is True:
         if time.time() - start_time > 30:
-            stop_all()
             print("failed to kill gates")
-            os._exit(-7)
+            return False
         send_key("3")
         send_key("4")
         send_key("5")
         send_key("6")
         time.sleep(0.1)
+    return True
 
 
 def run_to_center():
@@ -207,15 +199,6 @@ def protection_thread():
         time.sleep(0.1)
 
 
-def mercenary_thread():
-    print("starting mercenary thread")
-    mercs = ["alt_1", "alt_2"]
-    print("calling mercs")
-    for merc in mercs:
-        send_key(merc)
-        time.sleep(11)
-
-
 def combat_thread():
     print("starting combat thread")
     global run_combat_thread
@@ -252,12 +235,9 @@ def combat_thread():
 def main():
     print("starting...")
 
-    keyboard.on_press_key("f10", pause_all)
     keyboard.on_press_key("f12", stop_all)
 
-    cabal_window = pygetwindow.getWindowsWithTitle("CABAL")[0]
-    cabal_window.activate()
-    cabal_window.maximize()
+    focus_cabal()
 
     threading.Thread(target=protection_thread).start()
 
@@ -272,7 +252,11 @@ def main():
         init()
         start()
         run_to_gate()
-        kill_gate()
+
+        if not kill_gate():
+            exit_dungeon()
+            continue
+
         run_to_center()
 
         pyautogui.PAUSE = 0.001

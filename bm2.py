@@ -1,9 +1,7 @@
-import time
-
 import keyboard
 import pyautogui
 import pygetwindow as pyw
-
+import time
 from configuration import MouseConfiguration
 
 pyautogui.PAUSE = 0.01
