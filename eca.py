@@ -49,8 +49,8 @@ def start():
 
     start_time = time.time()
     while (
-        controller.image_on_screen("pics/eca/enter_button.png", 0.9) is False
-        and controller.image_on_screen("pics/eca/cannot_enter.png", 0.9) is False
+        not controller.image_on_screen("pics/eca/enter_button.png", 0.9)
+        and not controller.image_on_screen("pics/eca/cannot_enter.png", 0.9)
     ):
         if time.time() - start_time >= 15:
             stop_all()
@@ -58,33 +58,33 @@ def start():
             os._exit(-1)
         pyautogui.click(button="left", x=1065, y=583)
 
-    time.sleep(0.2)
+    time.sleep(0.5)
 
-    if controller.image_on_screen("pics/eca/cannot_enter.png", 0.9) is True:
+    if controller.image_on_screen("pics/eca/cannot_enter.png", 0.9):
         stop_all()
         print("found cannot enter button")
         os._exit(-2)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
-    if controller.image_click("pics/eca/enter_button.png", 0.9) is False:
+    if not controller.image_click("pics/eca/enter_button.png", 0.9):
         stop_all()
         print("failed to find enter button")
         os._exit(-3)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
     pyautogui.moveTo(1, 1)
 
-    if controller.image_on_screen("pics/eca/challenge_screen.png", 0.9) is False:
+    if not controller.image_on_screen("pics/eca/challenge_screen.png", 0.9):
         stop_all()
         print("failed to find challenge screen")
         os._exit(-4)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
-    if controller.image_click("pics/eca/challenge_button.png", 0.9) is False:
+    if not controller.image_click("pics/eca/challenge_button.png", 0.9):
         stop_all()
         print("failed to find challenge button")
         os._exit(-5)
-    time.sleep(0.2)
+    time.sleep(0.5)
 
 
 def run_to_gate():
@@ -98,7 +98,7 @@ def run_to_gate():
     pydirectinput.press("2", interval=0.4)
     pydirectinput.press("1", interval=0.6)
     pyautogui.dragTo(x=800, y=864, button="right", duration=0.5)
-    time.sleep(0.2)
+    time.sleep(0.5)
     pyautogui.moveTo(x=1250, y=60)
     pydirectinput.press("1", interval=0.6)
     pydirectinput.press("2", interval=0.4)
@@ -113,7 +113,7 @@ def kill_gate() -> bool:
     print("kill gate...")
 
     start_time = time.time()
-    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is False:
+    while not controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9):
         if time.time() - start_time > 15:
             print("failed to find gates")
             return False
@@ -121,7 +121,7 @@ def kill_gate() -> bool:
         time.sleep(0.1)
 
     start_time = time.time()
-    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is True:
+    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9):
         if time.time() - start_time > 30:
             print("failed to kill gates")
             return False
@@ -153,12 +153,14 @@ def dead() -> bool:
 def resurrect() -> bool:
     if not controller.image_click("pics/eca/normal_resurrect.png", 0.9):
         return False
+    time.sleep(0.5)
     return controller.image_click("pics/eca/confirmation.png", 0.9)
 
 
 def exit_dungeon() -> bool:
     if not controller.image_click("pics/eca/exit_button.png", 0.9):
         return False
+    time.sleep(0.5)
     return controller.image_click("pics/eca/exit_confirmation_button.png", 0.9)
 
 
@@ -177,8 +179,10 @@ def cleared() -> bool:
 def exit_after_clear() -> bool:
     if not controller.image_click("pics/eca/clear_confirmation.png", 0.9):
         return False
+    time.sleep(0.5)
     if not controller.image_click("pics/eca/roll_dice.png", 0.9):
         return False
+    time.sleep(0.5)
     return controller.image_click("pics/eca/exit_after_clear.png", 0.9)
 
 
@@ -198,7 +202,7 @@ def protection_thread_func(
         internal_pause.wait()
         main_pause.wait()
 
-        if cleared() is True:
+        if cleared():
             run_combat_thread = False
             pydirectinput.press("space")
             pydirectinput.press("space")
@@ -208,17 +212,17 @@ def protection_thread_func(
             print(f"cleared!")
             exit_after_clear()
 
-        if failed() is True:
+        if failed():
             run_combat_thread = False
             print(f"failed!")
             dungeon_failed()
 
-        if dead() is True:
+        if dead():
             run_combat_thread = False
             print(f"dead!")
             resurrect()
-            if failed() is True:
-                run_combat_thread = False
+            time.sleep(0.5)
+            if failed():
                 print(f"failed!")
                 dungeon_failed()
             else:
@@ -279,7 +283,7 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         if diff > 300:
             controller.send_key("7")
 
-        if diff % 240 == 0 and diff > 300 or one_shot_trigger is False:
+        if diff % 240 == 0 and diff > 300 or not one_shot_trigger:
             controller.send_key("ctrl_8")
             one_shot_trigger = True
 
