@@ -1,15 +1,12 @@
+import mouse
+import pyautogui
+import pygetwindow
+from configuration import MouseConfiguration
 from datetime import datetime
+from pywinauto.application import Application
 from typing import Optional
 
-import mouse
-import pyautogui as pygui
-import pygetwindow
-import pygetwindow as pyw
-from pywinauto.application import Application
-
-from util.configuration import MouseConfiguration
-
-cabal_window = pyw.getWindowsWithTitle("CABAL")[0]
+cabal_window = pygetwindow.getWindowsWithTitle("CABAL")[0]
 cabal_window_controller = (
     Application().connect(title_re="CABAL").window(title_re="CABAL")
 )
@@ -50,13 +47,13 @@ skill_cfg_dict = {
     "ctrl_8": {"X": 0, "Y": 0},
 }
 
-cfg = MouseConfiguration(skill_cfg_dict, "skills.json")
+cfg = MouseConfiguration(skill_cfg_dict, "configs/skills.json")
 cfg.load_configuration()
 
 
 def send_key(key):
     if cabal_window.isActive:
-        pygui.click(
+        pyautogui.click(
             button="right",
             x=cfg.configuration[key]["X"],
             y=cfg.configuration[key]["Y"],
@@ -72,29 +69,33 @@ def send_key_background(key):
 
 def image_on_screen(img: str, confidence: float) -> bool:
     for _ in range(3):
-        item = pygui.locateOnScreen(img, confidence=confidence)
-        if item is not None:
-            return True
+        try:
+            item = pyautogui.locateOnScreen(img, confidence=confidence)
+            if item != None:
+                return True
+        except:
+            continue
     return False
 
 
-def image_locate(img: str, confidence: float) -> Optional[pygui.Point]:
+def image_locate(img: str, confidence: float) -> Optional[pyautogui.Point]:
     for _ in range(3):
-        item = pygui.locateCenterOnScreen(image=img, confidence=confidence)
-        if item is not None:
-            return item
+        try:
+            item = pyautogui.locateCenterOnScreen(image=img, confidence=confidence)
+            if item != None:
+                return item
+        except:
+            continue
     return None
 
 
 def image_click(img: str, confidence: float, off_x: int = 0, off_y: int = 0) -> bool:
     item = image_locate(img, confidence)
     if item is not None:
-        (
-            x,
-            y,
-        ) = item
+        x = item.x
+        y = item.y
         print(f"clicking on x: {x + off_x}, y: {y + off_y}")
-        pygui.click(button="left", x=x + off_x, y=y + off_y)
+        pyautogui.click(button="left", x=x + off_x, y=y + off_y)
         return True
     return False
 
@@ -104,12 +105,10 @@ def image_double_click(
 ) -> bool:
     item = image_locate(img, confidence)
     if item is not None:
-        (
-            x,
-            y,
-        ) = item
+        x = item.x
+        y = item.y
         print(f"clicking on x: {x + off_x}, y: {y + off_y}")
-        pygui.doubleClick(button="left", x=x + off_x, y=y + off_y)
+        pyautogui.doubleClick(button="left", x=x + off_x, y=y + off_y)
         return True
     return False
 
@@ -125,7 +124,6 @@ def double_click(x, y):
 
 
 def focus_cabal():
-    cabal_window = pygetwindow.getWindowsWithTitle("CABAL")[0]
     cabal_window.activate()
 
 

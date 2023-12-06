@@ -4,7 +4,7 @@ import keyboard
 import pyautogui
 import pygetwindow as pyw
 
-from util.configuration import MouseConfiguration
+from configuration import MouseConfiguration
 
 pyautogui.PAUSE = 0.01
 cabal_window = pyw.getWindowsWithTitle("CABAL")[0]
@@ -16,7 +16,7 @@ cfg = {
     "walking_area": {"X": 0, "Y": 0},
     "use_time_reducer": {"X": 0, "Y": 0},
 }
-config = MouseConfiguration(cfg, "bm2.json")
+config = MouseConfiguration(cfg, "configs/bm2.json")
 config.load_configuration()
 cfg = config.configuration
 

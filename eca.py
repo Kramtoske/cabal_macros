@@ -7,8 +7,7 @@ import pyautogui as pygui
 import pydirectinput as pyd
 import pygetwindow as pyw
 
-import util.controller as controller
-from util.controller import send_key
+import controller
 
 run_combat_thread = True
 run_main_loop = True
@@ -56,8 +55,8 @@ def start():
 
     start_time = time.time()
     while (
-        controller.image_on_screen("pics/enter_button.png", 0.9) is False
-        and controller.image_on_screen("pics/cannot_enter.png", 0.9) is False
+        controller.image_on_screen("pics/eca/enter_button.png", 0.9) is False
+        and controller.image_on_screen("pics/eca/cannot_enter.png", 0.9) is False
     ):
         if time.time() - start_time >= 15:
             stop_all()
@@ -67,13 +66,13 @@ def start():
 
     time.sleep(0.2)
 
-    if controller.image_on_screen("pics/cannot_enter.png", 0.9) is True:
+    if controller.image_on_screen("pics/eca/cannot_enter.png", 0.9) is True:
         stop_all()
         print("found cannot enter button")
         os._exit(-2)
     time.sleep(0.2)
 
-    if controller.image_click("pics/enter_button.png", 0.9) is False:
+    if controller.image_click("pics/eca/enter_button.png", 0.9) is False:
         stop_all()
         print("failed to find enter button")
         os._exit(-3)
@@ -81,13 +80,13 @@ def start():
 
     pygui.moveTo(1, 1)
 
-    if controller.image_on_screen("pics/challenge_screen.png", 0.9) is False:
+    if controller.image_on_screen("pics/eca/challenge_screen.png", 0.9) is False:
         stop_all()
         print("failed to find challenge screen")
         os._exit(-4)
     time.sleep(0.2)
 
-    if controller.image_click("pics/challenge_button.png", 0.9) is False:
+    if controller.image_click("pics/eca/challenge_button.png", 0.9) is False:
         stop_all()
         print("failed to find challenge button")
         os._exit(-5)
@@ -120,7 +119,7 @@ def kill_gate():
     print("kill gate...")
 
     start_time = time.time()
-    while controller.image_on_screen("pics/gate_hp_bar.png", 0.9) is False:
+    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is False:
         if time.time() - start_time > 15:
             stop_all()
             print("failed to find gates")
@@ -129,15 +128,15 @@ def kill_gate():
         time.sleep(0.1)
 
     start_time = time.time()
-    while controller.image_on_screen("pics/gate_hp_bar.png", 0.9) is True:
+    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9) is True:
         if time.time() - start_time > 30:
             stop_all()
             print("failed to kill gates")
             os._exit(-7)
-        send_key("3")
-        send_key("4")
-        send_key("5")
-        send_key("6")
+        controller.send_key("3")
+        controller.send_key("4")
+        controller.send_key("5")
+        controller.send_key("6")
         time.sleep(0.1)
 
 
@@ -154,49 +153,49 @@ def run_to_center():
 
 
 def dead() -> bool:
-    return controller.image_on_screen("pics/death_window.png", confidence=0.9)
+    return controller.image_on_screen("pics/eca/death_window.png", confidence=0.9)
 
 
 def resurrect() -> bool:
-    if controller.image_click("pics/normal_resurrect.png", 0.9) == False:
+    if controller.image_click("pics/eca/normal_resurrect.png", 0.9) == False:
         return False
-    return controller.image_click("pics/confirmation.png", 0.9)
+    return controller.image_click("pics/eca/confirmation.png", 0.9)
 
 
 def exit_dungeon() -> bool:
-    if controller.image_click("pics/exit_button.png", 0.9) == False:
+    if controller.image_click("pics/eca/exit_button.png", 0.9) == False:
         return False
-    if controller.image_click("pics/exit_confirmation_button.png", 0.9) == False:
+    if controller.image_click("pics/eca/exit_confirmation_button.png", 0.9) == False:
         return False
     return True
 
 
 def failed() -> bool:
-    return controller.image_on_screen("pics/dungeon_failed.png", 0.9)
+    return controller.image_on_screen("pics/eca/dungeon_failed.png", 0.9)
 
 
 def dungeon_failed() -> bool:
-    return controller.image_click("pics/ok_button.png", 0.9)
+    return controller.image_click("pics/eca/ok_button.png", 0.9)
 
 
 def cleared() -> bool:
-    return controller.image_on_screen("pics/cleared.png", 0.9)
+    return controller.image_on_screen("pics/eca/cleared.png", 0.9)
 
 
 def exit_after_clear() -> bool:
-    if controller.image_click("pics/clear_confirmation.png", 0.9) == False:
+    if controller.image_click("pics/eca/clear_confirmation.png", 0.9) == False:
         return False
-    if controller.image_click("pics/roll_dice.png", 0.9) == False:
+    if controller.image_click("pics/eca/roll_dice.png", 0.9) == False:
         return False
-    if controller.image_click("pics/exit_after_clear.png", 0.9) == False:
+    if controller.image_click("pics/eca/exit_after_clear.png", 0.9) == False:
         return False
     return True
 
 
 def disconnected() -> bool:
     return controller.image_on_screen(
-        "pics/disconnected.png", 0.9
-    ) or controller.image_on_screen("pics/account_login.png", 0.9)
+        "pics/eca/disconnected.png", 0.9
+    ) or controller.image_on_screen("pics/eca/account_login.png", 0.9)
 
 
 def protection_thread(main_pause: threading.Event, internal_pause: threading.Event):
@@ -241,7 +240,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
     mercs = ["alt_1", "alt_2"]
     print("calling mercs")
     for merc in mercs:
-        send_key(merc)
+        controller.send_key(merc)
         time.sleep(11)
 
     start_time = time.time()
@@ -252,7 +251,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
         if (time.time() - start_time) > 920:
             print("calling mercs")
             for merc in mercs:
-                send_key(merc)
+                controller.send_key(merc)
                 time.sleep(11)
             break
         time.sleep(0.1)
@@ -271,25 +270,25 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         main_pause.wait()
         diff = time.time() - start_time
 
-        send_key("3")
-        send_key("4")
-        send_key("5")
-        send_key("6")
+        controller.send_key("3")
+        controller.send_key("4")
+        controller.send_key("5")
+        controller.send_key("6")
 
-        send_key("8")
-        send_key("9")
+        controller.send_key("8")
+        controller.send_key("9")
 
-        send_key("alt_3")
-        send_key("alt_4")
-        send_key("alt_5")
-        send_key("alt_6")
-        send_key("alt_7")
+        controller.send_key("alt_3")
+        controller.send_key("alt_4")
+        controller.send_key("alt_5")
+        controller.send_key("alt_6")
+        controller.send_key("alt_7")
 
         if diff > 300:
-            send_key("7")
+            controller.send_key("7")
 
         if diff % 240 == 0 and diff > 300 or one_shot_trigger is False:
-            send_key("ctrl_8")
+            controller.send_key("ctrl_8")
             one_shot_trigger = True
 
         if counter % 10 == 0:
@@ -363,7 +362,7 @@ def main():
         print("refilling sp...")
         counter = 0
         while run_main_loop and counter < 6:
-            send_key("ctrl_8")
+            controller.send_key("ctrl_8")
             time.sleep(6)
             counter = counter + 1
 
