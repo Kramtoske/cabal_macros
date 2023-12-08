@@ -49,8 +49,8 @@ def start():
 
     start_time = time.time()
     while (
-        not controller.image_on_screen("pics/eca/enter_button.png", 0.9)
-        and not controller.image_on_screen("pics/eca/cannot_enter.png", 0.9)
+        not controller.image_on_screen("pics/enter_button.png", 0.9)
+        and not controller.image_on_screen("pics/cannot_enter.png", 0.9)
     ):
         if time.time() - start_time >= 15:
             stop_all()
@@ -60,13 +60,13 @@ def start():
 
     time.sleep(0.5)
 
-    if controller.image_on_screen("pics/eca/cannot_enter.png", 0.9):
+    if controller.image_on_screen("pics/cannot_enter.png", 0.9):
         stop_all()
         print("found cannot enter button")
         os._exit(-2)
     time.sleep(0.5)
 
-    if not controller.image_click("pics/eca/enter_button.png", 0.9):
+    if not controller.image_click("pics/enter_button.png", 0.9):
         stop_all()
         print("failed to find enter button")
         os._exit(-3)
@@ -74,13 +74,13 @@ def start():
 
     pyautogui.moveTo(1, 1)
 
-    if not controller.image_on_screen("pics/eca/challenge_screen.png", 0.9):
+    if not controller.image_on_screen("pics/challenge_screen.png", 0.9):
         stop_all()
         print("failed to find challenge screen")
         os._exit(-4)
     time.sleep(0.5)
 
-    if not controller.image_click("pics/eca/challenge_button.png", 0.9):
+    if not controller.image_click("pics/challenge_button.png", 0.9):
         stop_all()
         print("failed to find challenge button")
         os._exit(-5)
@@ -113,7 +113,7 @@ def kill_gate() -> bool:
     print("kill gate...")
 
     start_time = time.time()
-    while not controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9):
+    while not controller.image_on_screen("pics/gate_hp_bar.png", 0.9):
         if time.time() - start_time > 15:
             print("failed to find gates")
             return False
@@ -121,7 +121,7 @@ def kill_gate() -> bool:
         time.sleep(0.1)
 
     start_time = time.time()
-    while controller.image_on_screen("pics/eca/gate_hp_bar.png", 0.9):
+    while controller.image_on_screen("pics/gate_hp_bar.png", 0.9):
         if time.time() - start_time > 30:
             print("failed to kill gates")
             return False
@@ -147,49 +147,49 @@ def run_to_center():
 
 
 def dead() -> bool:
-    return controller.image_on_screen("pics/eca/death_window.png", confidence=0.9)
+    return controller.image_on_screen("pics/death_window.png", confidence=0.9)
 
 
 def resurrect() -> bool:
-    if not controller.image_click("pics/eca/normal_resurrect.png", 0.9):
+    if not controller.image_click("pics/normal_resurrect.png", 0.9):
         return False
     time.sleep(0.5)
-    return controller.image_click("pics/eca/confirmation.png", 0.9)
+    return controller.image_click("pics/confirmation.png", 0.9)
 
 
 def exit_dungeon() -> bool:
-    if not controller.image_click("pics/eca/exit_button.png", 0.9):
+    if not controller.image_click("pics/exit_button.png", 0.9):
         return False
     time.sleep(0.5)
-    return controller.image_click("pics/eca/exit_confirmation_button.png", 0.9)
+    return controller.image_click("pics/exit_confirmation_button.png", 0.9)
 
 
 def failed() -> bool:
-    return controller.image_on_screen("pics/eca/dungeon_failed.png", 0.9)
+    return controller.image_on_screen("pics/dungeon_failed.png", 0.9)
 
 
 def dungeon_failed() -> bool:
-    return controller.image_click("pics/eca/ok_button.png", 0.9)
+    return controller.image_click("pics/ok_button.png", 0.9)
 
 
 def cleared() -> bool:
-    return controller.image_on_screen("pics/eca/cleared.png", 0.9)
+    return controller.image_on_screen("pics/cleared.png", 0.9)
 
 
 def exit_after_clear() -> bool:
-    if not controller.image_click("pics/eca/clear_confirmation.png", 0.9):
+    if not controller.image_click("pics/clear_confirmation.png", 0.9):
         return False
     time.sleep(0.5)
-    if not controller.image_click("pics/eca/roll_dice.png", 0.9):
+    if not controller.image_click("pics/roll_dice.png", 0.9):
         return False
     time.sleep(0.5)
-    return controller.image_click("pics/eca/exit_after_clear.png", 0.9)
+    return controller.image_click("pics/exit_after_clear.png", 0.9)
 
 
 def disconnected() -> bool:
     return controller.image_on_screen(
-        "pics/eca/disconnected.png", 0.9
-    ) or controller.image_on_screen("pics/eca/account_login.png", 0.9)
+        "pics/disconnected.png", 0.9
+    ) or controller.image_on_screen("pics/account_login.png", 0.9)
 
 
 def protection_thread_func(

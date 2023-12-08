@@ -25,8 +25,8 @@ def start():
 
     start_time = time.time()
     while (
-        image_on_screen("pics/ca/enter_button.png", 0.9) is False
-        and image_on_screen("pics/ca/cannot_enter.png", 0.9) is False
+        image_on_screen("pics/enter_button.png", 0.9) is False
+        and image_on_screen("pics/cannot_enter.png", 0.9) is False
     ):
         if time.time() - start_time >= 20:
             stop_all()
@@ -37,13 +37,13 @@ def start():
 
     time.sleep(0.5)
 
-    if image_on_screen("pics/ca/cannot_enter.png", 0.9) is True:
+    if image_on_screen("pics/cannot_enter.png", 0.9) is True:
         stop_all()
         print("found cannot enter button")
         os._exit(-2)
     time.sleep(0.5)
 
-    if image_click("pics/ca/enter_button.png", 0.9) is False:
+    if image_click("pics/enter_button.png", 0.9) is False:
         stop_all()
         print("failed to find enter button")
         os._exit(-3)
@@ -51,13 +51,13 @@ def start():
 
     pyautogui.moveTo(1, 1)
 
-    if image_on_screen("pics/ca/challenge_screen.png", 0.9) is False:
+    if image_on_screen("pics/challenge_screen.png", 0.9) is False:
         stop_all()
         print("failed to find challenge screen")
         os._exit(-4)
     time.sleep(0.5)
 
-    if image_click("pics/ca/challenge_button.png", 0.9) is False:
+    if image_click("pics/challenge_button.png", 0.9) is False:
         stop_all()
         print("failed to find challenge button")
         os._exit(-5)
@@ -84,7 +84,7 @@ def kill_gate() -> bool:
     print("kill gate...")
 
     start_time = time.time()
-    while image_on_screen("pics/ca/gate_hp_bar.png", 0.9) is False:
+    while image_on_screen("pics/gate_hp_bar.png", 0.9) is False:
         if time.time() - start_time > 15:
             print("failed to find gates")
             return False
@@ -92,7 +92,7 @@ def kill_gate() -> bool:
         time.sleep(0.1)
 
     start_time = time.time()
-    while image_on_screen("pics/ca/gate_hp_bar.png", 0.9) is True:
+    while image_on_screen("pics/gate_hp_bar.png", 0.9) is True:
         if time.time() - start_time > 30:
             print("failed to kill gates")
             return False
@@ -115,48 +115,48 @@ def run_to_center():
 
 
 def dead() -> bool:
-    return image_on_screen("pics/ca/death_window.png", confidence=0.9)
+    return image_on_screen("pics/death_window.png", confidence=0.9)
 
 
 def resurrect() -> bool:
-    if not image_click("pics/ca/normal_resurrect.png", 0.9):
+    if not image_click("pics/normal_resurrect.png", 0.9):
         return False
-    return image_click("pics/ca/confirmation.png", 0.9)
+    return image_click("pics/confirmation.png", 0.9)
 
 
 def exit_dungeon() -> bool:
-    if not image_click("pics/ca/exit_button.png", 0.9):
+    if not image_click("pics/exit_button.png", 0.9):
         return False
-    if not image_click("pics/ca/exit_confirmation_button.png", 0.9):
+    if not image_click("pics/exit_confirmation_button.png", 0.9):
         return False
     return True
 
 
 def failed() -> bool:
-    return image_on_screen("pics/ca/dungeon_failed.png", 0.9)
+    return image_on_screen("pics/dungeon_failed.png", 0.9)
 
 
 def dungeon_failed() -> bool:
-    return image_click("pics/ca/ok_button.png", 0.9)
+    return image_click("pics/ok_button.png", 0.9)
 
 
 def cleared() -> bool:
-    return image_on_screen("pics/ca/cleared.png", 0.9)
+    return image_on_screen("pics/cleared.png", 0.9)
 
 
 def exit_after_clear() -> bool:
-    if not image_click("pics/ca/clear_confirmation.png", 0.9):
+    if not image_click("pics/clear_confirmation.png", 0.9):
         return False
-    if not image_click("pics/ca/roll_dice.png", 0.9):
+    if not image_click("pics/roll_dice.png", 0.9):
         return False
-    if not image_click("pics/ca/exit_after_clear.png", 0.9):
+    if not image_click("pics/exit_after_clear.png", 0.9):
         return False
     return True
 
 
 def disconnected() -> bool:
-    return image_on_screen("pics/ca/disconnected.png", 0.9) or image_on_screen(
-        "pics/ca/account_login.png", 0.9
+    return image_on_screen("pics/disconnected.png", 0.9) or image_on_screen(
+        "pics/account_login.png", 0.9
     )
 
 
