@@ -44,11 +44,9 @@ def start():
     print("start...")
 
     start_time = time.time()
-    while not image_on_screen("pics/enter_button.png", 0.9) and not image_on_screen(
-        "pics/cannot_enter.png", 0.9
-    ):
+    while not image_on_screen("pics/dungeon_window.png", 0.9):
         if time.time() - start_time >= 20:
-            stop("cannot find enter button", -1)
+            stop("cannot find dungeon entry", -1)
         pyautogui.click(button="left", x=1096, y=483)
         time.sleep(3)
 
