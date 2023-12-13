@@ -9,6 +9,16 @@ from controller import image_click, image_on_screen, send_key, focus_cabal
 pyautogui.FAILSAFE = False
 run_combat_thread = False
 
+ca_list = [
+    {"X": 1023, "Y": 209},  # ca1
+    {"X": 1023, "Y": 231},  # ca2
+    {"X": 1023, "Y": 249},  # ca3
+    {"X": 1023, "Y": 271},  # ca4
+    {"X": 1023, "Y": 288},  # ca5
+    {"X": 1023, "Y": 307},  # ca6
+    {"X": 1023, "Y": 328},  # ca7
+]
+
 
 def stop_all(_event=None):
     print("STOPPING...")
@@ -24,9 +34,8 @@ def start():
     print("start...")
 
     start_time = time.time()
-    while (
-        image_on_screen("pics/enter_button.png", 0.9) is False
-        and image_on_screen("pics/cannot_enter.png", 0.9) is False
+    while not image_on_screen("pics/enter_button.png", 0.9) and not image_on_screen(
+        "pics/cannot_enter.png", 0.9
     ):
         if time.time() - start_time >= 20:
             stop_all()
@@ -35,13 +44,21 @@ def start():
         pyautogui.click(button="left", x=1096, y=483)
         time.sleep(3)
 
-    time.sleep(0.5)
+    found_enter_button = False
+    for ca in reversed(ca_list):
+        pyautogui.click(button="left", x=ca["X"], y=ca["Y"])
+        time.sleep(0.5)
+        if image_on_screen("pics/enter_button.png", 0.9):
+            found_enter_button = True
+            break
+        else:
+            ca_list.remove(ca)
+            continue
 
-    if image_on_screen("pics/cannot_enter.png", 0.9) is True:
+    if not found_enter_button:
         stop_all()
-        print("found cannot enter button")
+        print("failed to find enter button")
         os._exit(-2)
-    time.sleep(0.5)
 
     if image_click("pics/enter_button.png", 0.9) is False:
         stop_all()

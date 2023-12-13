@@ -48,10 +48,9 @@ def start():
     print("start...")
 
     start_time = time.time()
-    while (
-        not controller.image_on_screen("pics/enter_button.png", 0.9)
-        and not controller.image_on_screen("pics/cannot_enter.png", 0.9)
-    ):
+    while not controller.image_on_screen(
+        "pics/enter_button.png", 0.9
+    ) and not controller.image_on_screen("pics/cannot_enter.png", 0.9):
         if time.time() - start_time >= 15:
             stop_all()
             print("cannot find enter button")
