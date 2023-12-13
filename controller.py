@@ -51,7 +51,17 @@ cfg = MouseConfiguration(skill_cfg_dict, "configs/skills.json")
 cfg.load_configuration()
 
 
-def send_key(key):
+def scale_coordinates(x, y):
+    source_width, source_height = (2560, 1440)
+    target_width, target_height = (2560, 1440)
+
+    scaled_x = int((x / source_width) * target_width)
+    scaled_y = int((y / source_height) * target_height)
+
+    return scaled_x, scaled_y
+
+
+def press_skillbar(key):
     if cabal_window.isActive:
         pyautogui.click(
             button="right",
@@ -61,7 +71,7 @@ def send_key(key):
         )
 
 
-def send_key_background(key):
+def press_skillbar_background(key):
     cabal_window_controller.click(
         "right", coords=(cfg.configuration[key]["X"], cfg.configuration[key]["Y"] - 25)
     )
@@ -111,6 +121,11 @@ def image_double_click(
         pyautogui.doubleClick(button="left", x=x + off_x, y=y + off_y)
         return True
     return False
+
+
+def mouse_move(x, y):
+    scaled_x, scaled_y = scale_coordinates(x, y)
+    mouse.move(scaled_x, scaled_y)
 
 
 def click(x, y):

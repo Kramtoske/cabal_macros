@@ -4,7 +4,13 @@ import pyautogui
 import pydirectinput
 import threading
 import time
-from controller import image_click, image_on_screen, send_key, focus_cabal
+from controller import (
+    image_click,
+    image_on_screen,
+    press_skillbar,
+    focus_cabal,
+    mouse_move,
+)
 
 pyautogui.FAILSAFE = False
 run_combat_thread = False
@@ -20,9 +26,13 @@ ca_list = [
 ]
 
 
+def stop(reason: str, code: int):
+    print(f"Exiting with code {code}. Reason {reason}")
+    os._exit(code)
+
+
 def stop_all(_event=None):
-    print("STOPPING...")
-    os._exit(0)
+    stop("Stop button pressed", 0)
 
 
 def init():
@@ -38,9 +48,7 @@ def start():
         "pics/cannot_enter.png", 0.9
     ):
         if time.time() - start_time >= 20:
-            stop_all()
-            print("cannot find enter button")
-            os._exit(-1)
+            stop("cannot find enter button", -1)
         pyautogui.click(button="left", x=1096, y=483)
         time.sleep(3)
 
@@ -56,28 +64,20 @@ def start():
             continue
 
     if not found_enter_button:
-        stop_all()
-        print("failed to find enter button")
-        os._exit(-2)
+        stop("failed to find enter button", -2)
 
     if image_click("pics/enter_button.png", 0.9) is False:
-        stop_all()
-        print("failed to find enter button")
-        os._exit(-3)
+        stop("failed to find enter button", -3)
     time.sleep(0.5)
 
     pyautogui.moveTo(1, 1)
 
     if image_on_screen("pics/challenge_screen.png", 0.9) is False:
-        stop_all()
-        print("failed to find challenge screen")
-        os._exit(-4)
+        stop("failed to find challenge screen", -4)
     time.sleep(0.5)
 
     if image_click("pics/challenge_button.png", 0.9) is False:
-        stop_all()
-        print("failed to find challenge button")
-        os._exit(-5)
+        stop("failed to find challenge button", -5)
     time.sleep(0.5)
 
 
@@ -113,10 +113,10 @@ def kill_gate() -> bool:
         if time.time() - start_time > 30:
             print("failed to kill gates")
             return False
-        send_key("3")
-        send_key("4")
-        send_key("5")
-        send_key("6")
+        press_skillbar("3")
+        press_skillbar("4")
+        press_skillbar("5")
+        press_skillbar("6")
         time.sleep(0.1)
     return True
 
@@ -211,7 +211,7 @@ def protection_thread():
 
         if disconnected():
             run_combat_thread = False
-            os._exit(-6)
+            stop("Disconnected!", -6)
 
         time.sleep(0.1)
 
@@ -225,22 +225,22 @@ def combat_thread():
     while run_combat_thread:
         diff = time.time() - start_time
 
-        send_key("3")
-        send_key("4")
-        send_key("5")
-        send_key("6")
+        press_skillbar("3")
+        press_skillbar("4")
+        press_skillbar("5")
+        press_skillbar("6")
 
-        send_key("8")
-        send_key("9")
+        press_skillbar("8")
+        press_skillbar("9")
 
-        send_key("alt_3")
-        send_key("alt_4")
-        send_key("alt_5")
-        send_key("alt_6")
-        send_key("alt_7")
+        press_skillbar("alt_3")
+        press_skillbar("alt_4")
+        press_skillbar("alt_5")
+        press_skillbar("alt_6")
+        press_skillbar("alt_7")
 
         if diff > 300:
-            send_key("7")
+            press_skillbar("7")
 
         if counter % 10 == 0:
             pyautogui.click(button="middle")

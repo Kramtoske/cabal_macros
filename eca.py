@@ -13,17 +13,13 @@ internal_pause_event = threading.Event()
 pyautogui.FAILSAFE = False
 
 
+def stop(reason: str, code: int):
+    print(f"Exiting with code {code}. Reason {reason}")
+    os._exit(code)
+
+
 def stop_all(event=None):
-    print("STOPPING...")
-    global run_combat_thread
-    global run_main_loop
-    global pause_event
-    global internal_pause_event
-    run_combat_thread = False
-    run_main_loop = False
-    pause_event.set()
-    internal_pause_event.set()
-    os._exit(0)
+    stop("Stop button pressed", 0)
 
 
 def pause_all(event=None):
@@ -52,37 +48,27 @@ def start():
         "pics/enter_button.png", 0.9
     ) and not controller.image_on_screen("pics/cannot_enter.png", 0.9):
         if time.time() - start_time >= 15:
-            stop_all()
-            print("cannot find enter button")
-            os._exit(-1)
+            stop("cannot find enter button", -1)
         pyautogui.click(button="left", x=1065, y=583)
 
     time.sleep(0.5)
 
     if controller.image_on_screen("pics/cannot_enter.png", 0.9):
-        stop_all()
-        print("found cannot enter button")
-        os._exit(-2)
+        stop("found cannot enter button", -2)
     time.sleep(0.5)
 
     if not controller.image_click("pics/enter_button.png", 0.9):
-        stop_all()
-        print("failed to find enter button")
-        os._exit(-3)
+        stop("failed to find enter button", -3)
     time.sleep(0.5)
 
     pyautogui.moveTo(1, 1)
 
     if not controller.image_on_screen("pics/challenge_screen.png", 0.9):
-        stop_all()
-        print("failed to find challenge screen")
-        os._exit(-4)
+        stop("failed to find challenge screen", -4)
     time.sleep(0.5)
 
     if not controller.image_click("pics/challenge_button.png", 0.9):
-        stop_all()
-        print("failed to find challenge button")
-        os._exit(-5)
+        stop("failed to find challenge button", -5)
     time.sleep(0.5)
 
 
@@ -124,10 +110,10 @@ def kill_gate() -> bool:
         if time.time() - start_time > 30:
             print("failed to kill gates")
             return False
-        controller.send_key("3")
-        controller.send_key("4")
-        controller.send_key("5")
-        controller.send_key("6")
+        controller.press_skillbar("3")
+        controller.press_skillbar("4")
+        controller.press_skillbar("5")
+        controller.press_skillbar("6")
         time.sleep(0.1)
 
     return True
@@ -235,7 +221,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
     mercs = ["alt_1", "alt_2"]
     print("calling mercs")
     for merc in mercs:
-        controller.send_key(merc)
+        controller.press_skillbar(merc)
         time.sleep(12)
 
     start_time = time.time()
@@ -246,7 +232,7 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
         if (time.time() - start_time) > 920:
             print("calling mercs")
             for merc in mercs:
-                controller.send_key(merc)
+                controller.press_skillbar(merc)
                 time.sleep(12)
             break
         time.sleep(0.1)
@@ -265,25 +251,25 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         main_pause.wait()
         diff = time.time() - start_time
 
-        controller.send_key("3")
-        controller.send_key("4")
-        controller.send_key("5")
-        controller.send_key("6")
+        controller.press_skillbar("3")
+        controller.press_skillbar("4")
+        controller.press_skillbar("5")
+        controller.press_skillbar("6")
 
-        controller.send_key("8")
-        controller.send_key("9")
+        controller.press_skillbar("8")
+        controller.press_skillbar("9")
 
-        controller.send_key("alt_3")
-        controller.send_key("alt_4")
-        controller.send_key("alt_5")
-        controller.send_key("alt_6")
-        controller.send_key("alt_7")
+        controller.press_skillbar("alt_3")
+        controller.press_skillbar("alt_4")
+        controller.press_skillbar("alt_5")
+        controller.press_skillbar("alt_6")
+        controller.press_skillbar("alt_7")
 
         if diff > 300:
-            controller.send_key("7")
+            controller.press_skillbar("7")
 
         if diff % 240 == 0 and diff > 300 or not one_shot_trigger:
-            controller.send_key("ctrl_8")
+            controller.press_skillbar("ctrl_8")
             one_shot_trigger = True
 
         if counter % 10 == 0:
@@ -320,7 +306,7 @@ def main():
 
         if disconnected():
             internal_pause_event.clear()
-            stop_all()
+            stop("Disconnected!", -6)
 
         init()
         start()
@@ -352,7 +338,7 @@ def main():
         print("refilling sp...")
         counter = 0
         while run_main_loop and counter < 6:
-            controller.send_key("ctrl_8")
+            controller.press_skillbar("ctrl_8")
             time.sleep(6)
             counter = counter + 1
 
