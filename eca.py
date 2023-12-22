@@ -18,11 +18,11 @@ def stop(reason: str, code: int):
     os._exit(code)
 
 
-def stop_all(event=None):
+def stop_all(_event=None):
     stop("Stop button pressed", 0)
 
 
-def pause_all(event=None):
+def pause_all(_event=None):
     if pause_event.is_set():
         print("PAUSING...")
         pause_event.clear()
@@ -32,14 +32,12 @@ def pause_all(event=None):
 
 
 def init():
-    global internal_pause_event
     internal_pause_event.wait()
     print("init...")
     pydirectinput.press("f4")
 
 
 def start():
-    global internal_pause_event
     internal_pause_event.wait()
     print("start...")
 
@@ -67,7 +65,6 @@ def start():
 
 
 def run_to_gate():
-    global internal_pause_event
     internal_pause_event.wait()
     print("run to gate...")
     pyautogui.moveTo(x=41, y=876)
@@ -87,7 +84,6 @@ def run_to_gate():
 
 
 def kill_gate() -> bool:
-    global internal_pause_event
     internal_pause_event.wait()
     print("kill gate...")
 
@@ -114,7 +110,6 @@ def kill_gate() -> bool:
 
 
 def run_to_center():
-    global internal_pause_event
     internal_pause_event.wait()
     print("run to center...")
     pyautogui.moveTo(x=1200, y=51)
@@ -176,7 +171,6 @@ def protection_thread_func(
 ):
     print("starting protection thread")
     global run_combat_thread
-    global run_main_loop
     while run_main_loop:
         internal_pause.wait()
         main_pause.wait()
@@ -188,21 +182,21 @@ def protection_thread_func(
             pydirectinput.press("space")
             pydirectinput.press("space")
             pydirectinput.press("space")
-            print(f"cleared!")
+            print("cleared!")
             exit_after_clear()
 
         if failed():
             run_combat_thread = False
-            print(f"failed!")
+            print("failed!")
             dungeon_failed()
 
         if dead():
             run_combat_thread = False
-            print(f"dead!")
+            print("dead!")
             resurrect()
             time.sleep(0.5)
             if failed():
-                print(f"failed!")
+                print("failed!")
                 dungeon_failed()
             else:
                 exit_dungeon()
@@ -211,23 +205,21 @@ def protection_thread_func(
 
 def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Event):
     print("starting mercenary thread")
-    global run_combat_thread
     mercs = ["alt_1", "alt_2"]
     print("calling mercs")
     for merc in mercs:
         controller.press_skillbar(merc)
-        time.sleep(12)
+        time.sleep(15)
 
     start_time = time.time()
-
     while run_combat_thread:
         internal_pause.wait()
         main_pause.wait()
-        if (time.time() - start_time) > 920:
+        if (time.time() - start_time) > 940:
             print("calling mercs")
             for merc in mercs:
                 controller.press_skillbar(merc)
-                time.sleep(12)
+                time.sleep(15)
             break
         time.sleep(0.1)
 
@@ -235,11 +227,9 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
 def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
     print("starting combat thread")
     global run_combat_thread
-    global run_main_loop
     start_time = time.time()
     counter = 0
     run_combat_thread = True
-    one_shot_trigger = False
     while run_combat_thread and run_main_loop:
         internal_pause.wait()
         main_pause.wait()
@@ -262,12 +252,19 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         if diff > 300:
             controller.press_skillbar("7")
 
-        if diff % 240 == 0 and diff > 300 or not one_shot_trigger:
+        if diff % 300 == 0 and diff > 300:
+            print("using sp pot")
             controller.press_skillbar("ctrl_8")
-            one_shot_trigger = True
+            controller.press_skillbar("ctrl_8")
+            controller.press_skillbar("ctrl_8")
+            controller.press_skillbar("ctrl_8")
 
         if counter % 10 == 0:
-            pyautogui.click(button="middle")
+            if diff > 1080:
+                if not controller.image_on_screen('pics/boss_icon.png', 0.9):
+                    pyautogui.click(button="middle")
+            else:
+                pyautogui.click(button="middle")
 
         counter = counter + 1
         time.sleep(0.1)
@@ -275,9 +272,6 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
 
 def main():
     print("starting...")
-    global run_main_loop
-    global pause_event
-    global internal_pause_event
 
     keyboard.on_press_key("f10", pause_all)
     keyboard.on_press_key("f12", stop_all)

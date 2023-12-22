@@ -4,13 +4,7 @@ import pyautogui
 import pydirectinput
 import threading
 import time
-from controller import (
-    image_click,
-    image_on_screen,
-    press_skillbar,
-    focus_cabal,
-    mouse_move,
-)
+from controller import image_click, image_on_screen, press_skillbar, focus_cabal
 
 pyautogui.FAILSAFE = False
 run_combat_thread = False
@@ -241,7 +235,8 @@ def combat_thread():
             press_skillbar("7")
 
         if counter % 10 == 0:
-            pyautogui.click(button="middle")
+            if not image_on_screen('pics/boss_icon.png', 0.9):
+                pyautogui.click(button="middle")
 
         counter = counter + 1
         time.sleep(0.1)

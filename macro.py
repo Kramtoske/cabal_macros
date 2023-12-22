@@ -1,4 +1,5 @@
 import keyboard
+import pyautogui
 import pygetwindow
 import time
 
@@ -9,12 +10,11 @@ counter = 0
 
 while not keyboard.is_pressed("f12"):
     if cabal_window.isActive:
+        keyboard.send("3")
         keyboard.send("4")
         keyboard.send("5")
-        keyboard.send("6")
-        keyboard.send("7")
         if counter % 3 == 0:
-            keyboard.send("z")
+            pyautogui.click(button="middle")
         keyboard.send("space")
         counter = counter + 1
     time.sleep(0.5)
