@@ -252,7 +252,7 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         if diff > 300:
             controller.press_skillbar("7")
 
-        if diff % 300 == 0 and diff > 300:
+        if int(diff) % 480 == 0 and diff > 300:
             print("using sp pot")
             controller.press_skillbar("ctrl_8")
             controller.press_skillbar("ctrl_8")
