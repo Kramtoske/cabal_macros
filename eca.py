@@ -261,7 +261,7 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
 
         if counter % 10 == 0:
             if diff > 1080:
-                if not controller.image_on_screen('pics/boss_icon.png', 0.9):
+                if not controller.image_on_screen("pics/boss_icon.png", 0.9):
                     pyautogui.click(button="middle")
             else:
                 pyautogui.click(button="middle")
@@ -329,6 +329,11 @@ def main():
             controller.press_skillbar("ctrl_8")
             time.sleep(6)
             counter = counter + 1
+
+        pyautogui.click(button="right", x=196, y=122)
+        pyautogui.click(button="right", x=196, y=122)
+        pyautogui.click(button="right", x=196, y=122)
+        time.sleep(4)
 
     protection_thread.join()
 

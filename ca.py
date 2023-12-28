@@ -235,7 +235,7 @@ def combat_thread():
             press_skillbar("7")
 
         if counter % 10 == 0:
-            if not image_on_screen('pics/boss_icon.png', 0.9):
+            if not image_on_screen("pics/boss_icon.png", 0.9):
                 pyautogui.click(button="middle")
 
         counter = counter + 1
