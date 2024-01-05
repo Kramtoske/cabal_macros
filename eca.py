@@ -165,6 +165,15 @@ def disconnected() -> bool:
         "pics/disconnected.png", 0.9
     ) or controller.image_on_screen("pics/account_login.png", 0.9)
 
+def cancel_bm():
+    print("canceling bm")
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
 
 def protection_thread_func(
     main_pause: threading.Event, internal_pause: threading.Event
@@ -183,6 +192,7 @@ def protection_thread_func(
             pydirectinput.press("space")
             pydirectinput.press("space")
             print("cleared!")
+            cancel_bm()
             exit_after_clear()
 
         if failed():
@@ -252,13 +262,6 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         if diff > 300:
             controller.press_skillbar("7")
 
-        if int(diff) % 480 == 0 and diff > 300:
-            print("using sp pot")
-            controller.press_skillbar("ctrl_8")
-            controller.press_skillbar("ctrl_8")
-            controller.press_skillbar("ctrl_8")
-            controller.press_skillbar("ctrl_8")
-
         if counter % 10 == 0:
             if diff > 1080:
                 if not controller.image_on_screen("pics/boss_icon.png", 0.9):
@@ -321,8 +324,7 @@ def main():
             thread_join.join()
 
         print("after threads...")
-
-        time.sleep(1)
+        time.sleep(5)
         print("refilling sp...")
         counter = 0
         while run_main_loop and counter < 6:
@@ -330,10 +332,9 @@ def main():
             time.sleep(6)
             counter = counter + 1
 
-        pyautogui.click(button="right", x=196, y=122)
-        pyautogui.click(button="right", x=196, y=122)
-        pyautogui.click(button="right", x=196, y=122)
-        time.sleep(4)
+        time.sleep(3)
+        cancel_bm()
+        time.sleep(3)
 
     protection_thread.join()
 

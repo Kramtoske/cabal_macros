@@ -168,6 +168,15 @@ def disconnected() -> bool:
         "pics/account_login.png", 0.9
     )
 
+def cancel_bm():
+    print("canceling bm")
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
+    pyautogui.click(button="right", x=196, y=122)
+    time.sleep(0.1)
 
 def protection_thread():
     print("starting protection thread")
@@ -183,6 +192,7 @@ def protection_thread():
             pydirectinput.press("space")
             pydirectinput.press("space")
             print("cleared!")
+            cancel_bm()
             exit_after_clear()
 
         if failed():
@@ -253,10 +263,6 @@ def main():
 
     while True:
         pyautogui.PAUSE = 0.1
-        # cancel bm if any
-        time.sleep(2)
-        pyautogui.click(button="right", x=196, y=122)
-        time.sleep(2)
         pyautogui.click(button="right", x=1096, y=483)
 
         init()
@@ -268,15 +274,15 @@ def main():
             continue
 
         run_to_center()
-
         pyautogui.PAUSE = 0.001
-
         print("start threads...")
         t = threading.Thread(target=combat_thread)
         t.start()
         t.join()
 
-        time.sleep(5)
+        time.sleep(3)
+        cancel_bm()
+        time.sleep(3)
 
 
 main()
