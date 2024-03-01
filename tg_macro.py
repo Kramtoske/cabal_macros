@@ -22,6 +22,14 @@ def dead() -> bool:
     return controller.image_on_screen("pics/death_window.png", confidence=0.9)
 
 
+def click_every_pixel(coords):
+    left, top, width, height = coords
+    for x in range(left, left + width):
+        for y in range(top, top + height):
+            pyautogui.click(x, y)
+            time.sleep(0.01)
+
+
 def resurrect() -> bool:
     if not controller.image_click("pics/normal_resurrect.png", 0.9):
         return False
@@ -30,6 +38,7 @@ def resurrect() -> bool:
         return False
     pyautogui.click(button="left", x=1443, y=694)
     pyautogui.click(button="left", x=1447, y=717)
+    click_every_pixel((1202,584,300,300))
     return True
 
 
