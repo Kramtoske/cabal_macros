@@ -165,6 +165,7 @@ def disconnected() -> bool:
         "pics/disconnected.png", 0.9
     ) or controller.image_on_screen("pics/account_login.png", 0.9)
 
+
 def cancel_bm():
     print("canceling bm")
     time.sleep(0.1)
@@ -174,6 +175,7 @@ def cancel_bm():
     time.sleep(0.1)
     pyautogui.click(button="right", x=196, y=122)
     time.sleep(0.1)
+
 
 def protection_thread_func(
     main_pause: threading.Event, internal_pause: threading.Event

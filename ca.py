@@ -168,6 +168,7 @@ def disconnected() -> bool:
         "pics/account_login.png", 0.9
     )
 
+
 def cancel_bm():
     print("canceling bm")
     time.sleep(0.1)
@@ -177,6 +178,7 @@ def cancel_bm():
     time.sleep(0.1)
     pyautogui.click(button="right", x=196, y=122)
     time.sleep(0.1)
+
 
 def protection_thread():
     print("starting protection thread")

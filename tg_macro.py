@@ -38,7 +38,7 @@ def resurrect() -> bool:
         return False
     pyautogui.click(button="left", x=1443, y=694)
     pyautogui.click(button="left", x=1447, y=717)
-    click_every_pixel((1202,584,300,300))
+    click_every_pixel((1202, 584, 300, 300))
     return True
 
 
