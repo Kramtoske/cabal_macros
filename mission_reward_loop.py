@@ -54,7 +54,7 @@ def indicate_relog_finish():
             time.sleep(0.2)
         keyboard.send("i")
         time.sleep(0.2)
-    except Exception as ex:
+    except pyautogui.ImageNotFoundException as ex:
         log(f"locate on screen - equipment path - exception: {ex}")
 
 
@@ -75,11 +75,10 @@ def select_channel():
         try:
             if pyautogui.locateOnScreen(CH_CONFIRM_PATH, confidence=0.9) is not None:
                 break
-            else:
-                counter += 1
-                if counter > 1:
-                    break
-        except Exception as ex:
+            counter += 1
+            if counter > 1:
+                break
+        except pyautogui.ImageNotFoundException as ex:
             log(f"locate on screen - confirm path - exception: {ex}")
 
 
@@ -97,7 +96,7 @@ def relog():
 
     try:
         indicate_relog_finish()
-    except Exception:
+    except pyautogui.ImageNotFoundException:
         return 0.0
 
     return time.time() - start
@@ -166,7 +165,7 @@ def collect_rewards():
 
     try:
         indicate_relog_finish()
-    except Exception:
+    except pyautogui.ImageNotFoundException:
         return 0.0
 
     return time.time() - start

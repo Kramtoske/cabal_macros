@@ -62,11 +62,10 @@ def select_channel():
         try:
             if pyautogui.locateOnScreen(CH_CONFIRM_PATH, confidence=0.9) is not None:
                 break
-            else:
-                counter += 1
-                if counter > 1:
-                    break
-        except Exception as ex:
+            counter += 1
+            if counter > 1:
+                break
+        except pyautogui.ImageNotFoundException as ex:
             print(f"locate on screen - confirm path - exception: {ex}")
 
 

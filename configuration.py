@@ -21,7 +21,7 @@ class MouseConfiguration:
     def save_configuration(self):
         for key in self.configuration:
             print(f"Right click on {key}")
-            mouse.wait(button=mouse.RIGHT, target_types=(mouse.DOWN))
+            mouse.wait(button=mouse.RIGHT, target_types=mouse.DOWN)
             self.configuration[key]["X"] = mouse.get_position()[0]
             self.configuration[key]["Y"] = mouse.get_position()[1]
 

@@ -17,7 +17,7 @@ config.load_configuration()
 cfg = config.configuration
 
 
-def switch_helm(event=None):
+def switch_helm(_event=None):
     if not cabal_window.isActive:
         return
 

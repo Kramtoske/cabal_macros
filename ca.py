@@ -51,9 +51,7 @@ def start():
         if image_on_screen("pics/enter_button.png", 0.9):
             found_enter_button = True
             break
-        else:
-            ca_list.remove(ca)
-            continue
+        ca_list.remove(ca)
 
     if not found_enter_button:
         stop("failed to find enter button", -2)

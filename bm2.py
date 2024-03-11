@@ -19,7 +19,7 @@ config.load_configuration()
 cfg = config.configuration
 
 
-def bm2(event=None):
+def bm2(_event=None):
     if not cabal_window.isActive:
         return
     # remove all windows
