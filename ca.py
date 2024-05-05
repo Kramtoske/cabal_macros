@@ -238,8 +238,6 @@ def combat_thread():
         press_skillbar("alt_3")
         press_skillbar("alt_4")
         press_skillbar("alt_5")
-        press_skillbar("alt_6")
-        press_skillbar("alt_7")
 
         if diff > 300:
             press_skillbar("7")
@@ -251,10 +249,28 @@ def combat_thread():
         counter = counter + 1
         time.sleep(0.1)
 
+def buff_thread(main_pause: threading.Event, internal_pause: threading.Event):
+    print("starting buff thread")
+    buffs = ["alt_6", "alt_7"]
+    print("buff ")
+    for buff in buffs:
+        controller.press_skillbar(buff)
+        time.sleep(5)
+
+    start_time = time.time()
+    while run_combat_thread:
+        internal_pause.wait()
+        main_pause.wait()
+        if (time.time() - start_time) > 1800:
+            print("buffing")
+            for buff in buffs:
+                controller.press_skillbar(buff)
+                time.sleep(5)
+            break
+        time.sleep(0.1)
 
 def main():
     print("starting...")
-
     keyboard.on_press_key("f12", stop_all)
 
     focus_cabal()

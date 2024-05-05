@@ -73,9 +73,10 @@ def run_to_gate():
     pydirectinput.press("1", interval=0.6)
     pydirectinput.press("2", interval=0.4)
     pydirectinput.press("1", interval=0.6)
-    pyautogui.dragTo(x=800, y=864, button="right", duration=0.5)
+    pyautogui.dragTo(x=190, y=864, button="right", duration=0.5)
     time.sleep(0.5)
-    pyautogui.moveTo(x=1250, y=60)
+    pyautogui.moveTo(x=1300, y=160)
+    time.sleep(1)
     pydirectinput.press("1", interval=0.6)
     pydirectinput.press("2", interval=0.4)
     pydirectinput.press("1", interval=0.6)
@@ -112,7 +113,7 @@ def kill_gate() -> bool:
 def run_to_center():
     internal_pause_event.wait()
     print("run to center...")
-    pyautogui.moveTo(x=1200, y=51)
+    pyautogui.moveTo(x=1280, y=200)
     pydirectinput.press("1", interval=0.6)
     pydirectinput.press("2", interval=0.4)
     pydirectinput.press("1", interval=0.6)
@@ -235,6 +236,25 @@ def mercenary_thread(main_pause: threading.Event, internal_pause: threading.Even
             break
         time.sleep(0.1)
 
+def buff_thread(main_pause: threading.Event, internal_pause: threading.Event):
+    print("starting buff thread")
+    buffs = ["alt_6", "alt_7", "alt_8", "alt_9"]
+    print("buff ")
+    for buff in buffs:
+        controller.press_skillbar(buff)
+        time.sleep(2)
+
+    start_time = time.time()
+    while run_combat_thread:
+        internal_pause.wait()
+        main_pause.wait()
+        if (time.time() - start_time) > 1800:
+            print("buffing")
+            for buff in buffs:
+                controller.press_skillbar(buff)
+                time.sleep(2)
+            break
+        time.sleep(0.1)
 
 def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
     print("starting combat thread")
@@ -258,10 +278,8 @@ def combat_thread(main_pause: threading.Event, internal_pause: threading.Event):
         controller.press_skillbar("alt_3")
         controller.press_skillbar("alt_4")
         controller.press_skillbar("alt_5")
-        controller.press_skillbar("alt_6")
-        controller.press_skillbar("alt_7")
 
-        if diff > 300:
+        if diff > 600:
             controller.press_skillbar("7")
 
         if counter % 10 == 0:
@@ -315,7 +333,7 @@ def main():
         print("start threads...")
 
         combat_thread_joins = []
-        for thread in [combat_thread, mercenary_thread]:
+        for thread in [combat_thread, mercenary_thread , buff_thread]:
             t = threading.Thread(
                 target=thread, args=(pause_event, internal_pause_event)
             )
@@ -330,7 +348,7 @@ def main():
         print("refilling sp...")
         counter = 0
         while run_main_loop and counter < 6:
-            controller.press_skillbar("ctrl_8")
+            controller.press_skillbar("alt_10")
             time.sleep(6)
             counter = counter + 1
 
